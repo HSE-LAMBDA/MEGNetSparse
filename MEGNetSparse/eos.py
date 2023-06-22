@@ -5,10 +5,6 @@ from pymatgen.analysis.local_env import CrystalNN
 from functools import cached_property
 from pymatgen.core.sites import PeriodicSite
 
-import sys
-
-sys.path.append('.')
-
 
 class Shells:
     def __init__(self, structure):

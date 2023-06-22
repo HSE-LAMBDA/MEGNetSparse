@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from layers import MegnetModule, ShiftedSoftplus
+from .layers import MegnetModule, ShiftedSoftplus
 from torch_geometric.nn.aggr import Set2Set
 
 
