@@ -111,13 +111,44 @@ def add_state(structure, unit_cell):
     return structure
 
 
+def add_unit_cell_properties(structure, unit_cell, supercell_size):
+    structure = structure.copy()
+    reference_supercell = unit_cell.copy()
+    reference_supercell.make_supercell(supercell_size)
+
+    sites = []
+
+    structure_dict = strucure_to_dict(structure)
+    reference_structure_dict = strucure_to_dict(reference_supercell)
+
+    for coords, reference_site in reference_structure_dict.items():
+        if coords not in structure_dict:
+            continue
+        else:
+            cur_site = structure_dict[coords]
+            cur_site.properties.update(reference_site.properties)
+            sites.append(
+                PeriodicSite(
+                    species=cur_site.species,
+                    coords=coords,
+                    coords_are_cartesian=False,
+                    lattice=structure.lattice,
+                    properties=cur_site.properties,
+                )
+            )
+
+    res_structure = Structure.from_sites(sites)
+    return res_structure
+
+
 def convert_to_sparse_representation(
         structure,
         unit_cell,
         supercell_size,
         skip_eos=False,
         skip_was=False,
-        skip_state=False
+        skip_state=False,
+        copy_unit_cell_properties=False,
 ):
     structure = structure.copy()
     unit_cell = unit_cell.copy()
@@ -131,5 +162,8 @@ def convert_to_sparse_representation(
 
     if not skip_state:
         structure = add_state(structure, unit_cell)
+
+    if copy_unit_cell_properties:
+        structure = add_unit_cell_properties(structure, unit_cell, supercell_size)
 
     return structure

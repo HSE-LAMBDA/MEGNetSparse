@@ -142,7 +142,7 @@ class MEGNetTrainer:
 
             return train_mae, train_mse
 
-    def evaluate_on_test(self):
+    def evaluate_on_test(self, return_predictions=False):
         total = []
         results = []
         self.model.train(False)
@@ -164,6 +164,9 @@ class MEGNetTrainer:
                 results.append(self.scaler.inverse_transform(preds))
 
             cur_test_loss = sum(total) / len(self.test_structures)
+
+        if not return_predictions:
+            return cur_test_loss
         return cur_test_loss, torch.concat(results).to('cpu').data.reshape(-1, 1)
 
     def predict_structures(self, structures_list):
