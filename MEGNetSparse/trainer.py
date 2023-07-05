@@ -136,11 +136,11 @@ class MEGNetTrainer:
                 ).to('cpu').data.numpy()
             )
 
-            train_mae = sum(maes) / len(self.train_structures)
-            self.scheduler.step(train_mae)
-            train_mse = np.mean(mses)
+        train_mae = sum(maes) / len(self.train_structures)
+        self.scheduler.step(train_mae)
+        train_mse = np.mean(mses)
 
-            return train_mae, train_mse
+        return train_mae, train_mse
 
     def evaluate_on_test(self, return_predictions=False):
         total = []
