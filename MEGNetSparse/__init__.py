@@ -1,0 +1,2 @@
+from MEGNetSparse.trainer import MEGNetTrainer
+from MEGNetSparse.dense2sparse import convert_to_sparse_representation
