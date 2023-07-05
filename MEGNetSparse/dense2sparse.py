@@ -160,10 +160,10 @@ def convert_to_sparse_representation(
     if not skip_was:
         structure = add_was(structure, unit_cell, supercell_size)
 
-    if not skip_state:
-        structure = add_state(structure, unit_cell)
-
     if copy_unit_cell_properties:
         structure = add_unit_cell_properties(structure, unit_cell, supercell_size)
+
+    if not skip_state:
+        structure = add_state(structure, unit_cell)
 
     return structure
