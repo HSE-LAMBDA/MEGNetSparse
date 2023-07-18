@@ -4,11 +4,13 @@ from joblib import Parallel, delayed
 from tqdm import tqdm
 from torch_geometric.loader import DataLoader
 import torch.nn.functional as F
+from torch.utils.data import WeightedRandomSampler
 
 from .model import MEGNet
 from .utils import Scaler
 from .struct2graph import FlattenGaussianDistanceConverter, GaussianDistanceConverter, AtomFeaturesExtractor, \
     SimpleCrystalConverter
+from .losses import MSELoss, MAELoss
 
 
 def set_attr(structure, attr, name):
@@ -76,10 +78,15 @@ class MEGNetTrainer:
             test_data,
             test_targets,
             target_name,
+            train_weights=None,
+            test_weights=None,
     ):
         print('adding targets to data')
         train_data = [set_attr(s, y, 'y') for s, y in zip(train_data, train_targets)]
         test_data = [set_attr(s, y, 'y') for s, y in zip(test_data, test_targets)]
+
+        if test_weights is not None:
+            test_data = [set_attr(s, w, 'weight') for s, w in zip(test_data, test_weights)]
 
         print("converting data")
         self.train_structures = Parallel(n_jobs=-1)(
@@ -88,11 +95,15 @@ class MEGNetTrainer:
             delayed(self.converter.convert)(s) for s in tqdm(test_data))
         self.scaler.fit(self.train_structures)
 
+        if train_weights is not None:
+            self.sampler = WeightedRandomSampler(torch.tensor(train_weights).float(), len(train_weights))
+
         self.trainloader = DataLoader(
             self.train_structures,
             batch_size=self.config["model"]["train_batch_size"],
             shuffle=True,
             num_workers=0,
+            sampler=self.sampler if train_weights is not None else None
         )
 
         self.testloader = DataLoader(
@@ -129,9 +140,10 @@ class MEGNetTrainer:
 
             mses.append(loss.to("cpu").data.numpy())
             maes.append(
-                F.l1_loss(
+                MAELoss(
                     self.scaler.inverse_transform(preds),
                     batch.y,
+                    weights=batch.weight,
                     reduction='sum'
                 ).to('cpu').data.numpy()
             )
@@ -155,9 +167,10 @@ class MEGNetTrainer:
                 ).squeeze()
 
                 total.append(
-                    F.l1_loss(
+                    MAELoss(
                         self.scaler.inverse_transform(preds),
                         batch.y,
+                        weights=batch.weight,
                         reduction='sum'
                     ).to('cpu').data.numpy()
                 )
