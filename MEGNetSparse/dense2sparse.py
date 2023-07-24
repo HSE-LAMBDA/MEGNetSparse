@@ -145,7 +145,7 @@ def convert_to_sparse_representation(
         structure,
         unit_cell,
         supercell_size,
-        skip_eos=False,
+        skip_eos=True,
         skip_was=False,
         skip_state=False,
         copy_unit_cell_properties=False,

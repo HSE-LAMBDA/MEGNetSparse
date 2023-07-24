@@ -209,6 +209,17 @@ class MEGNetTrainer:
 
     def load(self, path):
         checkpoint = torch.load(path)
-        self.model.load_state_dict(checkpoint['model'])
-        self.optimizer.load_state_dict(checkpoint['optimizer'])
-        self.scaler.load_state_dict(checkpoint['scaler'])
+        try:
+            self.model.load_state_dict(checkpoint['model'])
+        except Exception:
+            print("No model parameters found")
+
+        try:
+            self.optimizer.load_state_dict(checkpoint['optimizer'])
+        except Exception:
+            print("No optimizer parameters found")
+
+        try:
+            self.scaler.load_state_dict(checkpoint['scaler'])
+        except Exception:
+            print("No scaler parameters found")
