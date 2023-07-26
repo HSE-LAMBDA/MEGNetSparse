@@ -6,9 +6,9 @@
 pip install MEGNetSparse
 ```
 
-1) You must first install the torch and torch-geometric
-2) The notebook provided in the examples will only work 
-with pymatgen=2023.1.30, so you may need to reinstall it.
+1) You must first install the torch and [torch_geometric](https://pytorch-geometric.readthedocs.io/en/latest/install/installation.html)
+2) The [notebook](examples/example.ipynb) provided in the examples will only work 
+with `pymatgen==2023.1.30`, so you may need to reinstall it.
 
 ### Usage
 
