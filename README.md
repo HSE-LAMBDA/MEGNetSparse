@@ -1,6 +1,6 @@
 # MEGNetSparse
 
-### Installation
+## Installation
 
 ```
 pip install MEGNetSparse
@@ -10,10 +10,10 @@ pip install MEGNetSparse
 2) The [notebook](examples/example.ipynb) provided in the examples will only work 
 with `pymatgen==2023.1.30`, so you may need to reinstall it.
 
-### Summary
+## Summary
 The library implements MEGNet model for sparse representations of crystals with point defects. The essence of the method is depicted in the figure below:
 ![Sparse representation construction](sparse.png)
-### Usage
+## Usage
 
 The library consists of two main parts: the first is the construction of a sparse representation of a crystal with point defects, the second is the training of a MEGNet model on this representation.
 
@@ -115,3 +115,8 @@ MEGNetTrainer.load(self, path)
 ```
 
 - path : str - where to load model data from
+## Citation
+Please cite the following paper if you use the library:
+```
+Kazeev, N., Al-Maeeni, A.R., Romanov, I. et al. Sparse representation for machine learning the properties of defects in 2D materials. npj Comput Mater 9, 113 (2023). https://doi.org/10.1038/s41524-023-01062-z
+```
