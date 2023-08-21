@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "MEGNetSparse"
-version = "0.0.9"
+version = "0.0.10"
 authors = [
   { name="Romanov Ignat", email="romanov.ignat.p@gmail.com" },
 ]

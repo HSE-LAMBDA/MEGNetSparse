@@ -207,8 +207,8 @@ class MEGNetTrainer:
         }
         torch.save(state_dict, str(path) + '/checkpoint.pth')
 
-    def load(self, path):
-        checkpoint = torch.load(path)
+    def load(self, path, map_location=None):
+        checkpoint = torch.load(path, map_location)
         try:
             self.model.load_state_dict(checkpoint['model'])
         except Exception:
