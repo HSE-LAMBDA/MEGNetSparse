@@ -10,8 +10,8 @@ pip install MEGNetSparse
 2) The [notebook](examples/example.ipynb) provided in the examples will only work 
 with `pymatgen==2023.1.30`, so you may need to reinstall it.
 
-## Run Online
-
+## Try Online
+https://constructor.app/platform/public/project/megnet_sparse
 
 ## Summary
 The library implements MEGNet model for sparse representations of crystals with point defects. The essence of the method is depicted in the figure below:
