@@ -181,7 +181,7 @@ class MEGNetTrainer:
 
     def predict_structures(self, structures_list):
         print("converting data")
-        structures = [self.converter.convert)(s) for s in tqdm(structures_list)]
+        structures = [self.converter.convert(s) for s in tqdm(structures_list)]
         loader = DataLoader(structures, batch_size=50, shuffle=False)
         results = []
         self.model.train(False)
