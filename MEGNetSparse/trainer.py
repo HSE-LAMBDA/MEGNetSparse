@@ -88,8 +88,8 @@ class MEGNetTrainer:
             test_data = [set_attr(s, w, 'weight') for s, w in zip(test_data, test_weights)]
 
         print("converting data")
-        self.train_structures= [set_attr(s, y, 'y') for s, y in zip(train_data, train_targets)]
-        self.test_structures = [set_attr(s, y, 'y') for s, y in zip(test_data, test_targets)]
+        self.train_structures = [self.converter.convert(s) for s in tqdm(train_data)]
+        self.test_structures = [self.converter.convert(s) for s in tqdm(test_data)]
         self.scaler.fit(self.train_structures)
 
         if train_weights is not None:
