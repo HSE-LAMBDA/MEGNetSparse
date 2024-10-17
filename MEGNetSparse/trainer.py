@@ -1,7 +1,6 @@
 import numpy as np
 import torch
-from joblib import Parallel, delayed
-from tqdm import tqdm
+from tqdm.auto import tqdm
 from torch_geometric.loader import DataLoader
 import torch.nn.functional as F
 from torch.utils.data import WeightedRandomSampler
@@ -89,10 +88,8 @@ class MEGNetTrainer:
             test_data = [set_attr(s, w, 'weight') for s, w in zip(test_data, test_weights)]
 
         print("converting data")
-        self.train_structures = Parallel(n_jobs=-1)(
-            delayed(self.converter.convert)(s) for s in tqdm(train_data))
-        self.test_structures = Parallel(n_jobs=-1)(
-            delayed(self.converter.convert)(s) for s in tqdm(test_data))
+        train_data = [set_attr(s, y, 'y') for s, y in zip(train_data, train_targets)]
+        test_data = [set_attr(s, y, 'y') for s, y in zip(test_data, test_targets)]
         self.scaler.fit(self.train_structures)
 
         if train_weights is not None:
@@ -184,8 +181,7 @@ class MEGNetTrainer:
 
     def predict_structures(self, structures_list):
         print("converting data")
-        structures = Parallel(n_jobs=-1)(
-            delayed(self.converter.convert)(s) for s in tqdm(structures_list))
+        structures = [self.converter.convert)(s) for s in tqdm(structures_list)]
         loader = DataLoader(structures, batch_size=50, shuffle=False)
         results = []
         self.model.train(False)
